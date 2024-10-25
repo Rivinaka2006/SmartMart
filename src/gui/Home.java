@@ -784,8 +784,51 @@ public class Home extends javax.swing.JFrame {
         polarAreaChart1.addItem(new ModelPolarAreaChart(new Color(60, 179, 113), "Sellings", 30));
     }
 
+    public void accessControl() {
+
+        String email = UserSignIn.getEmployeeEmail();
+
+        try {
+            ResultSet resultSet = MySQL2.executeSearch("SELECT * FROM `smartmart`.employee INNER JOIN `employee_type` "
+                    + "ON `employee`.employee_type_id = `employee_type`.id \n"
+                    + "WHERE `email` = '" + email + "'");
+
+            while (resultSet.next()) {
+                String uType = resultSet.getString("name");
+
+                if (uType.equals("Cashier")) {
+                    mainPanel.setEnabledAt(0, false);
+                    mainPanel.setEnabledAt(1, false);
+                    mainPanel.setEnabledAt(3, false);
+                    mainPanel.setEnabledAt(4, false);
+                    mainPanel.setEnabledAt(5, false);
+                    jLabel9.setEnabled(false);
+                    jLabel13.setEnabled(false);
+                    jLabel51.setEnabled(false);
+                    jLabel62.setEnabled(false);
+                    jLabel77.setEnabled(false);
+                    mainPanel.setSelectedIndex(6);
+                } else if (uType.equals("Account Manager")) {
+                    mainPanel.setEnabledAt(0, false);
+                    mainPanel.setEnabledAt(4, false);
+                    mainPanel.setEnabledAt(5, false);
+                    mainPanel.setEnabledAt(6, false);
+                    jLabel9.setEnabled(false);
+                    jLabel62.setEnabled(false);
+                    jLabel77.setEnabled(false);
+                    jLabel82.setEnabled(false);
+                    mainPanel.setSelectedIndex(1);
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public Home() {
         initComponents();
+        accessControl();
         responsive();
         loadEmployeeTypes();
         loadEmployeeGender();
@@ -3295,14 +3338,10 @@ public class Home extends javax.swing.JFrame {
             .addGroup(GRNLayout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addGroup(GRNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(GRNLayout.createSequentialGroup()
-                        .addGroup(GRNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(4, 4, 4))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, GRNLayout.createSequentialGroup()
-                        .addComponent(jPanel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(4, 4, 4))))
+                    .addComponent(jPanel33, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel31, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel32, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(4, 4, 4))
         );
         GRNLayout.setVerticalGroup(
             GRNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4738,8 +4777,8 @@ public class Home extends javax.swing.JFrame {
                             + "VALUES ('" + email + "','" + password + "','" + firstName + "','" + lastName + "','" + nic + "','" + mobile + "','" + sdf.format(date) + "','"
                             + employeeTypeMap.get(type) + "','" + employeeGenderMap.get(gender) + "')");
 
-                    JOptionPane.showMessageDialog(this, "Please Add the address also to display accurate details ", "Warning",
-                            JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Please Add the address also to display accurate details ", "Reminder",
+                            JOptionPane.INFORMATION_MESSAGE);
                     jButton1.grabFocus();
                     loadEmployees();
                     reset();
@@ -4780,31 +4819,49 @@ public class Home extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // DashBoard
+        if (!jLabel9.isEnabled()) {
+            return;
+        }
         mainPanel.setSelectedIndex(0);
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         // Employee
+        if (!jLabel13.isEnabled()) {
+            return;
+        }
         mainPanel.setSelectedIndex(1);
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
         // Customer
+        if (!jLabel14.isEnabled()) {
+            return;
+        }
         mainPanel.setSelectedIndex(2);
     }//GEN-LAST:event_jLabel14MouseClicked
 
     private void jLabel51MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel51MouseClicked
         // Supplier
+        if (!jLabel51.isEnabled()) {
+            return;
+        }
         mainPanel.setSelectedIndex(3);
     }//GEN-LAST:event_jLabel51MouseClicked
 
     private void jLabel62MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel62MouseClicked
         // Stock
+        if (!jLabel62.isEnabled()) {
+            return;
+        }
         mainPanel.setSelectedIndex(4);
     }//GEN-LAST:event_jLabel62MouseClicked
 
     private void jLabel77MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel77MouseClicked
         // GRN
+        if (!jLabel77.isEnabled()) {
+            return;
+        }
         mainPanel.setSelectedIndex(5);
     }//GEN-LAST:event_jLabel77MouseClicked
 
@@ -4821,7 +4878,10 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel81MouseClicked
 
     private void jLabel82MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel82MouseClicked
-        // Profile
+        // Invoice
+        if (!jLabel82.isEnabled()) {
+            return;
+        }
         mainPanel.setSelectedIndex(6);
     }//GEN-LAST:event_jLabel82MouseClicked
 
@@ -5088,16 +5148,29 @@ public class Home extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a employee to delete", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
 
-            try {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Are you sure you want to delete this employee?",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
 
+            try {
+                String uType = String.valueOf(jComboBox2.getSelectedItem());
                 String email = String.valueOf(jTable2.getValueAt(row, 0));
 
-                MySQL2.executeIUD("DELETE FROM `employee_address` WHERE `employee_email` = '" + email + "'");
-                MySQL2.executeIUD("DELETE FROM `employee` WHERE `email` = '" + email + "'");
+                if (uType.equals("Admin")) {
+                    JOptionPane.showMessageDialog(this, "Admin cannot be deleted", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else if (email.equals(UserSignIn.getEmployeeEmail())) {
+                    JOptionPane.showMessageDialog(this, "You are not allowed to delete your account", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        MySQL2.executeIUD("DELETE FROM `employee_address` WHERE `employee_email` = '" + email + "'");
+                        MySQL2.executeIUD("DELETE FROM `employee` WHERE `email` = '" + email + "'");
 
-                loadEmployees();
-                reset();
-
+                        loadEmployees();
+                        reset();
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -5388,6 +5461,7 @@ public class Home extends javax.swing.JFrame {
         jTextField4.setText("");
         jTextField5.setText("");
         jPasswordField1.setText("");
+        jTextField1.setEditable(true);
         jComboBox1.setSelectedIndex(0);
         jComboBox2.setSelectedIndex(0);
         jTable2.setSelectionMode(0);
