@@ -203,11 +203,11 @@ public class CustomerRegistration extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mobile", "First Name", "Last Name", "Email", "Points"
+                "Mobile", "First Name", "Last Name", "Email"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

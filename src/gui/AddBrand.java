@@ -172,13 +172,14 @@ public class AddBrand extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-// Add Brand
+    // Add Brand
         String Brand = jTextField1.getText().trim();
 
         if (Brand.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter a brand to add", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (Brand.length() > 45) {
-            JOptionPane.showMessageDialog(this, "Brand name is too long. Please enter a name with fewer than 45 characters.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Brand name is too long. Please enter a name with fewer than 45 characters.",
+                    "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
 
@@ -216,7 +217,7 @@ public class AddBrand extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-// Delete Brand
+    // Delete Brand
         int row = jTable1.getSelectedRow();
         int selectedRowCount = jTable1.getSelectedRowCount();
 

@@ -104,9 +104,9 @@ public class Stock extends javax.swing.JFrame {
             }
 
             if (query.contains("WHERE")) {
-                query += "AND ";
+                query += "AND `stock`.`qty` > 0 ";
             } else {
-                query += "WHERE ";
+                query += "WHERE `stock`.`qty` > 0 ";
             }
 
             double min_price = 0;

@@ -336,21 +336,23 @@ public class Home extends javax.swing.JFrame {
     }
 
     public void loadStock() {
-
         try {
-            String query = "SELECT * FROM `stock` INNER JOIN `product` ON `stock`.product_id = `product`.id INNER JOIN `brand` ON `product`.brand_id = `brand`.id ";
+            String query = "SELECT * FROM `stock` "
+                    + "INNER JOIN `product` ON `stock`.product_id = `product`.id "
+                    + "INNER JOIN `brand` ON `product`.brand_id = `brand`.id ";
 
             int row = jTable6.getSelectedRow();
 
+            // Check if a row is selected and add the product_id condition
             if (row != -1) {
                 String pid = String.valueOf(jTable6.getValueAt(row, 0));
                 query += "WHERE `stock`.`product_id` = '" + pid + "' ";
             }
 
             if (query.contains("WHERE")) {
-                query += "AND ";
+                query += "AND `stock`.`qty` > 0 ";
             } else {
-                query += "WHERE ";
+                query += "WHERE `stock`.`qty` > 0 ";
             }
 
             double min_price = 0;
@@ -364,14 +366,16 @@ public class Home extends javax.swing.JFrame {
                 max_price = Double.parseDouble(jFormattedTextField2.getText());
             }
 
+            // Add price conditions
             if (min_price > 0 && max_price == 0) {
-                query += "`stock`.`price` > '" + min_price + "' ";
+                query += "AND `stock`.`price` > '" + min_price + "' ";
             } else if (min_price == 0 && max_price > 0) {
-                query += "`stock`.`price` < '" + max_price + "' ";
+                query += "AND `stock`.`price` < '" + max_price + "' ";
             } else if (min_price > 0 && max_price > 0) {
-                query += "`stock`.`price` > '" + min_price + "' AND `stock`.`price` <  '" + max_price + "'";
+                query += "AND `stock`.`price` > '" + min_price + "' AND `stock`.`price` < '" + max_price + "' ";
             }
 
+            // Sorting conditions
             String sort = String.valueOf(jComboBox6.getSelectedItem());
             query += "ORDER BY ";
             query = query.replace("WHERE ORDER BY ", "ORDER BY ");
@@ -403,6 +407,7 @@ public class Home extends javax.swing.JFrame {
                 query += "`stock`.`qty` DESC";
             }
 
+            // Execute the query and populate the table
             ResultSet resultSet = MySQL2.executeSearch(query);
 
             DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
@@ -423,7 +428,6 @@ public class Home extends javax.swing.JFrame {
             e.printStackTrace();
             logger.log(Level.WARNING, "Error in load stock method", e);
         }
-
     }
 
     private void loadInvoiceItems() {
@@ -1182,7 +1186,7 @@ public class Home extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-home-24.png"))); // NOI18N
-        jLabel9.setText("  DashBoard");
+        jLabel9.setText("  Home");
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel9MouseClicked(evt);
@@ -2603,6 +2607,11 @@ public class Home extends javax.swing.JFrame {
             }
         });
         jTable5.getTableHeader().setReorderingAllowed(false);
+        jTable5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable5MouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(jTable5);
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
@@ -3475,6 +3484,11 @@ public class Home extends javax.swing.JFrame {
                 jFormattedTextField7ActionPerformed(evt);
             }
         });
+        jFormattedTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jFormattedTextField7KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -3718,8 +3732,8 @@ public class Home extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel106, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel105, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel105, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel106, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -3746,15 +3760,15 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PaymentMethodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel104))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel106)
-                    .addComponent(PaymentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(PaymentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel106))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BalanceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel105))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(printInvoiceButton)
                 .addContainerGap())
         );
@@ -4010,11 +4024,13 @@ public class Home extends javax.swing.JFrame {
                     found.setQty(found.getQty() + qtyValue);
                     loadGRNItems();
                 } else {
-                    JOptionPane.showMessageDialog(this, "GRN item already exists with different dates and prices", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "GRN item already exists with different dates and prices",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter valid numeric values for quantity, buying price, and selling price", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter valid numeric values for quantity, buying price, and selling price",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton23ActionPerformed
 
@@ -4093,8 +4109,6 @@ public class Home extends javax.swing.JFrame {
                     String sid = "";
 
                     if (resultSet.next()) {
-                        //existing stock
-
                         sid = resultSet.getString("id");
 
                         String currentQty = resultSet.getString("qty");
@@ -4128,7 +4142,6 @@ public class Home extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }
-
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
@@ -4324,7 +4337,8 @@ public class Home extends javax.swing.JFrame {
                 //System.out.println(total);
             }
 
-            ResultSet resultSet2 = MySQL2.executeSearch("SELECT COUNT(*) AS total FROM `grn` WHERE `supplier_mobile` = '" + String.valueOf(jTable4.getValueAt(row, 0)) + "'");
+            ResultSet resultSet2 = MySQL2.executeSearch("SELECT COUNT(*) AS total FROM `grn` WHERE "
+                    + "`supplier_mobile` = '" + String.valueOf(jTable4.getValueAt(row, 0)) + "'");
 
             if (resultSet2.next()) {
                 int totalGRNs = resultSet2.getInt("total");
@@ -4371,7 +4385,6 @@ public class Home extends javax.swing.JFrame {
                         a = "";
                     } else {
                         //Company update required
-                        // a = ",`company_id`='" + companyId + "'";
                         JOptionPane.showMessageDialog(this, "Company cannot be changed", "Warning", JOptionPane.WARNING_MESSAGE);
                     }
                     MySQL2.executeIUD("UPDATE `supplier` SET"
@@ -4908,8 +4921,6 @@ public class Home extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error loading image: " + e.getMessage());
             }
         }
-
-
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jLabel85MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel85MouseClicked
@@ -4944,12 +4955,12 @@ public class Home extends javax.swing.JFrame {
     private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
         // Print Customer
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/smartMart", "root", "Rivinaka1034@2006")) {
-            // Use class loader to load resources
+
             InputStream reportStream = getClass().getClassLoader().getResourceAsStream("reports/SmartMartCustomer.jasper");
 
             if (reportStream == null) {
                 System.out.println("Report file not found!");
-                return; // Stop execution if report file is not found
+                return;
             }
 
             HashMap<String, Object> parameters = new HashMap<>();
@@ -5034,7 +5045,6 @@ public class Home extends javax.swing.JFrame {
             }
         }
         loadInvoiceItems();
-
     }//GEN-LAST:event_jButton31ActionPerformed
 
     private void printInvoiceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printInvoiceButtonActionPerformed
@@ -5118,7 +5128,13 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_DiscountFieldKeyReleased
 
     private void PaymentFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PaymentFieldKeyReleased
-        calculate();
+        String payment = PaymentField.getText();
+        if (payment.matches("\\d+(\\.\\d+)?")) {
+            printInvoiceButton.setEnabled(true);
+            calculate();
+        } else {
+            printInvoiceButton.setEnabled(false);
+        }
     }//GEN-LAST:event_PaymentFieldKeyReleased
 
     private void PaymentMethodComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PaymentMethodComboBoxItemStateChanged
@@ -5161,7 +5177,8 @@ public class Home extends javax.swing.JFrame {
                 if (uType.equals("Admin")) {
                     JOptionPane.showMessageDialog(this, "Admin cannot be deleted", "Warning", JOptionPane.WARNING_MESSAGE);
                 } else if (email.equals(UserSignIn.getEmployeeEmail())) {
-                    JOptionPane.showMessageDialog(this, "You are not allowed to delete your account", "Warning", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "You are not allowed to delete your account",
+                            "Warning", JOptionPane.WARNING_MESSAGE);
                 } else {
                     if (confirm == JOptionPane.YES_OPTION) {
                         MySQL2.executeIUD("DELETE FROM `employee_address` WHERE `employee_email` = '" + email + "'");
@@ -5176,6 +5193,33 @@ public class Home extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton32ActionPerformed
+
+    private void jTable5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable5MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable5MouseClicked
+
+    private void jFormattedTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFormattedTextField7KeyReleased
+        // Quantity Validation
+        String entQtyText = jFormattedTextField7.getText();
+        String avaQtyText = jLabel96.getText();
+
+        if (entQtyText.matches("\\d+") && !entQtyText.equals("0")) {
+            try {
+                int entQty = Integer.parseInt(entQtyText);
+                int avaQty = Integer.parseInt(avaQtyText);
+
+                if (entQty > avaQty) {
+                    jButton31.setEnabled(false);
+                } else {
+                    jButton31.setEnabled(true);
+                }
+            } catch (NumberFormatException e) {
+                jButton31.setEnabled(false);  
+            }
+        } else {
+            jButton31.setEnabled(false);
+        }
+    }//GEN-LAST:event_jFormattedTextField7KeyReleased
 
     // public static void main(String args[]) {
     /* Set the Nimbus look and feel */
